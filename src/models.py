@@ -29,6 +29,49 @@ class Address(Base):
     def to_dict(self):
         return {}
 
+class Follower(Base):
+    __tablename__ = 'follower'
+    user_from_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    user_to_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+
+
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    username = Column(String(250))
+    firstname = Column(String(250))
+    lastname = Column(String(250))
+    email = Column(String(250))
+    like = Column(Integer, primary_key=True)
+
+class Media(Base):
+    __tablename__ = 'media'
+    id = Column(Integer, primary_key=True)
+    mediatype = Column(String(250))
+    url = Column(String(250))
+    post_id = Column(Integer, ForeignKey('post.id'))
+
+
+class Post(Base):
+    __tablename__ = 'post'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(ForeignKey('user.id'))
+    likes = Column(Integer, ForeignKey('like.id'), primary_key=True)
+
+
+class Comment(Base):
+    __tablename__ = 'comment'
+    id = Column(Integer, primary_key=True)
+    comment_text = Column(String(250))
+    author_id = Column(Integer, ForeignKey('user.id'))
+    post_id = Column(Integer, ForeignKey('post.id'))
+
+
+class Like(Base):
+    __tablename__ = 'like'
+    id = Column(Integer, primary_key=True)
+    post_id = Column(Integer, ForeignKey('post.id'))
+
 ## Draw from SQLAlchemy base
 try:
     result = render_er(Base, 'diagram.png')
